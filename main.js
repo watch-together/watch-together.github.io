@@ -84,3 +84,11 @@ $(document).on("click", ".result-row", function() {
 
   loadYT(id);
 });
+
+var socket = io("http://35.190.228.226/");
+socket.emit("create", roomId ? roomId : "general");
+
+socket.on("message", function(message) {
+  console.log(message);
+  loadYT(message);
+});

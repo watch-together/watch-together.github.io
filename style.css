@@ -23,10 +23,12 @@ body {
 
 #search-result {
   width: 480px;
-  height: 200px;
+  height: 250px;
   overflow-x: auto;
+  overflow-y: hidden;
   display: flex;
   flex-direction: row;
+  margin-bottom: 20px;
 }
 
 .loading {
