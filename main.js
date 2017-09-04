@@ -29,6 +29,10 @@ function restrucSearchResult(array) {
 }
 
 function loadYT(id) {
+  if($("#youtube-container").data("id") === id) {
+    return;
+  }
+  $("#youtube-container").data("id") = id;
   $("#youtube-container").html(
     '<iframe width="480" height="270" src="https://www.youtube.com/embed/' +
       id +
@@ -56,10 +60,7 @@ function getQueryVariable(variable) {
   return false;
 }
 
-var roomId = getQueryVariable("room");
-if (!!roomId) {
-  $("#room-title").text("Room: " + roomId);
-}
+var roomId = getQueryVariable("room") ? getQueryVariable("room") : "General";
 
 $("form").submit(function(e) {
   e.preventDefault();
@@ -81,14 +82,17 @@ $("form").submit(function(e) {
 
 $(document).on("click", ".result-row", function() {
   var id = $(this).data("id");
-
+  socket.emit("play", {
+    room: roomId,
+    play: id
+  });
   loadYT(id);
 });
 
 var socket = io("http://35.190.228.226/");
-socket.emit("create", roomId ? roomId : "general");
+socket.emit("create", roomId);
 
-socket.on("message", function(message) {
+socket.on("play", function(message) {
   console.log(message);
   loadYT(message);
 });
